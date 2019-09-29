@@ -1,69 +1,49 @@
 """
-Module for a game state.
+Superclass Game
 """
-from typing import List, Any
-import doctest
+from typing import Any
+from game_state import GameState
 
 
-class CurrentState:
+class Game:
     """
-    An abstract class that defines a state in a game.
-
-    ===Attributes===
-    get_instructions: get's the instructions for the game
-    str_to_move: converts a string from the user into a move for the game
-    is_over: returns a bool stating whether the game is over
-    is_winner: returns a bool stating if a player is a winner of a game.
+    Abstract class for a game to be played with two players.
     """
-    def __init__(self, is_p1_turn: bool)-> None:
-        """
-        Initialilze the variables for the abstract game state class.
-        @param player_one_turn: a boolean that expresses whether it is player
-        one's turn or not.
-        """
-        self.player_one_turn = is_p1_turn
-        self.get_possible_moves()
-        self.get_current_player_name()
 
-    def __str__(self) -> str:
-        """Return a string representation of the current state of the game.
+    def __init__(self, p1_starts: bool) -> None:
         """
-        return "{} is the current player \nThe possible moves available are " \
-               "{}.".format(self.get_current_player_name(),
-                            str(self.get_possible_moves()))
+        Initialize this Game, using p1_starts to find who the first player is.
+        """
+        raise NotImplementedError
 
-    def __eq__(self, other) -> bool:
-        """Return whether current state self is equal to anoter current state.
+    def get_instructions(self) -> str:
         """
-        return (self.player_one_turn == other.player_on_turn) and \
-               (self.get_possible_moves() == other.get_possible_moves()) and \
-               (self.get_current_player_name() ==
-                other.get_current_player_name())
+        Return the instructions for this Game.
+        """
+        raise NotImplementedError
 
-    def is_valid_move(self, move_to_make: object) -> bool:
-        """Return whether a specific move is valid to play on the game.
+    def is_over(self, state: GameState) -> bool:
         """
-        if move_to_make in self.get_possible_moves():
-            return True
-        else:
-            return False
+        Return whether or not this game is over at state.
+        """
+        raise NotImplementedError
 
-    def get_current_player_name(self) -> str:
-        """Return a string representation of the current player
+    def is_winner(self, player: str) -> bool:
         """
-        if self.player_one_turn:
-            return "p1"
-        else:
-            return "p2"
+        Return whether player has won the game.
 
-    def get_possible_moves(self) -> List[Any]:
-        """Return a list of the possible moves in the game given a
-        current state.
+        Precondition: player is 'p1' or 'p2'.
         """
-        raise NotImplementedError("Subclass must implement!")
+        raise NotImplementedError
 
-    def make_move(self, move_to_make: object) -> object:
-        """apply a specific move to a game state in order to initialize a new
-        game state.
+    def str_to_move(self, string: str) -> Any:
         """
-        raise NotImplementedError("Subclass must implement!")
+        Return the move that string represents. If string is not a move,
+        return some invalid move.
+        """
+        raise NotImplementedError
+
+
+if __name__ == "__main__":
+    from python_ta import check_all
+    check_all(config="a2_pyta.txt")
